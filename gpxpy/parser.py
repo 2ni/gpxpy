@@ -87,14 +87,14 @@ class XMLParser:
 
 class LXMLParser:
     """
-    Used when lxml is available. 
+    Used when lxml is available.
     """
 
     def __init__(self, xml):
         assert mod_etree
 
         if mod_utils.PYTHON_VERSION[0] == '3':
-            # In python 3 all strings are unicode and for some reason lxml 
+            # In python 3 all strings are unicode and for some reason lxml
             # don't like unicode strings with XMLs declared as UTF-8:
             self.xml = xml.encode('utf-8')
         else:
@@ -182,8 +182,8 @@ class GPXParser:
         """
         Parses the XML file and returns a GPX object.
 
-        It will throw GPXXMLSyntaxException if the XML file is invalid or 
-        GPXException if the XML file is valid but something is wrong with the 
+        It will throw GPXXMLSyntaxException if the XML file is invalid or
+        GPXException if the XML file is valid but something is wrong with the
         GPX data.
         """
         try:
@@ -207,12 +207,12 @@ class GPXParser:
             mod_logging.debug('Error in:\n%s\n-----------\n' % self.xml)
             mod_logging.exception(e)
 
-            # The library should work in the same way regardless of the 
-            # underlying XML parser that's why the exception thrown 
-            # here is GPXXMLSyntaxException (instead of simply throwing the 
-            # original minidom or lxml exception e). 
+            # The library should work in the same way regardless of the
+            # underlying XML parser that's why the exception thrown
+            # here is GPXXMLSyntaxException (instead of simply throwing the
+            # original minidom or lxml exception e).
             #
-            # But, if the user need the original exception (lxml or minidom) 
+            # But, if the user need the original exception (lxml or minidom)
             # it is available with GPXXMLSyntaxException.original_exception:
             raise mod_gpx.GPXXMLSyntaxException('Error parsing XML: %s' % str(e), e)
 
@@ -340,10 +340,10 @@ class GPXParser:
 
                 # append AutoroutePoints to route_points
                 extensions_node = self.xml_parser.get_first_child(child_node, 'extensions')
-                route_point_extension = self.xml_parser.get_first_child(extensions_node, 'RoutePointExtension')
+                route_point_extension = self.xml_parser.get_first_child(extensions_node, 'gpxx:RoutePointExtension')
                 rpt_nodes = self.xml_parser.get_children(route_point_extension)
                 for rpt_node in rpt_nodes:
-                    if self.xml_parser.get_node_name(rpt_node) == 'rpt':
+                    if self.xml_parser.get_node_name(rpt_node) == 'gpxx:rpt':
                         auto_route_point = self._parse_route_point(rpt_node)
                         route.points.append(auto_route_point)
 
